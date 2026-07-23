@@ -9,7 +9,7 @@ builder.Services.AddSingleton(sp =>
 {
     var config = sp.GetRequiredService<IConfiguration>();
     return new MongoDbContext(
-        config.GetConnectionString("MongoDb") ?? "mongodb://localhost:27017",
+        config.GetConnectionString("MongoDb") ?? "mongodb://127.0.0.1:27017",
         config.GetValue<string>("DatabaseName") ?? "POCPlaywright"
     );
 });

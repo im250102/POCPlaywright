@@ -10,7 +10,15 @@ public class MongoDbContext
 
     public MongoDbContext(string connectionString, string databaseName)
     {
-        var client = new MongoClient(connectionString);
+        var effectiveConnectionString = string.IsNullOrWhiteSpace(connectionString)
+            ? "mongodb://127.0.0.1:27017"
+            : connectionString;
+
+        effectiveConnectionString = effectiveConnectionString
+            .Replace("mongodb://localhost", "mongodb://127.0.0.1", StringComparison.OrdinalIgnoreCase)
+            .Replace("mongodb://[::1]", "mongodb://127.0.0.1", StringComparison.OrdinalIgnoreCase);
+
+        var client = new MongoClient(effectiveConnectionString);
         _database = client.GetDatabase(databaseName);
     }
 

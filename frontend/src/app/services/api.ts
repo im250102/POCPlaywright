@@ -7,7 +7,7 @@ import { MedicalReport } from '../models/medical-report.model';
 
 @Injectable({ providedIn: 'root' })
 export class Api {
-  private base = 'http://localhost:5000/api';
+  private base = 'http://localhost:5091/api';
 
   constructor(private http: HttpClient) {}
 
