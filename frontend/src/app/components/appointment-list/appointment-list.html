@@ -1,0 +1,16 @@
+<h2>Citas Médicas</h2>
+<a routerLink="/appointments/new" class="btn">Nueva Cita</a>
+<table>
+  <thead>
+    <tr><th>Paciente</th><th>Fecha</th><th>Motivo</th><th>Estado</th><th>Acción</th></tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let a of appointments">
+      <td>{{ a.patientName }}</td>
+      <td>{{ a.date | date:'short' }}</td>
+      <td>{{ a.reason }}</td>
+      <td>{{ a.status }}</td>
+      <td><button (click)="deleteAppointment(a.id!)">Cancelar</button></td>
+    </tr>
+  </tbody>
+</table>

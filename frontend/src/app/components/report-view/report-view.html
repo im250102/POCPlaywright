@@ -1,0 +1,22 @@
+<h2>Informes del Paciente</h2>
+
+<button class="btn" (click)="showForm = !showForm">
+  {{ showForm ? 'Cancelar' : 'Nuevo Informe' }}
+</button>
+
+<form *ngIf="showForm" #f="ngForm" (ngSubmit)="saveReport()">
+  <label>Título <input [(ngModel)]="newReport.title" name="title" required /></label>
+  <label>Contenido <textarea [(ngModel)]="newReport.content" name="content" required></textarea></label>
+  <label>Doctor <input [(ngModel)]="newReport.doctor" name="doctor" required /></label>
+  <label>Fecha <input [(ngModel)]="newReport.date" name="date" type="date" required /></label>
+  <button type="submit" [disabled]="f.invalid">Guardar</button>
+</form>
+
+<div class="report" *ngFor="let r of reports">
+  <h3>{{ r.title }}</h3>
+  <p class="meta">{{ r.date | date:'longDate' }} — Dr. {{ r.doctor }}</p>
+  <p>{{ r.content }}</p>
+  <button class="delete" (click)="deleteReport(r.id!)">Eliminar</button>
+</div>
+
+<p *ngIf="reports.length === 0">No hay informes para este paciente.</p>

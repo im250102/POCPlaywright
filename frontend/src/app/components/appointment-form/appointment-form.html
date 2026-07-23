@@ -1,0 +1,12 @@
+<h2>Nueva Cita</h2>
+<form #f="ngForm" (ngSubmit)="save()">
+  <label>Paciente
+    <select [(ngModel)]="appointment.patientId" name="patientId" (change)="onPatientChange()" required>
+      <option value="">Seleccionar...</option>
+      <option *ngFor="let p of patients" [value]="p.id">{{ p.name }}</option>
+    </select>
+  </label>
+  <label>Fecha <input [(ngModel)]="appointment.date" name="date" type="datetime-local" required /></label>
+  <label>Motivo <textarea [(ngModel)]="appointment.reason" name="reason" required></textarea></label>
+  <button type="submit" [disabled]="f.invalid">Crear Cita</button>
+</form>

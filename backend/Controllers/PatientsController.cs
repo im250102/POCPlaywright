@@ -1,0 +1,47 @@
+using backend.Models;
+using backend.Services;
+using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver;
+
+namespace backend.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class PatientsController : ControllerBase
+{
+    private readonly MongoDbContext _db;
+
+    public PatientsController(MongoDbContext db) => _db = db;
+
+    [HttpGet]
+    public async Task<IActionResult> GetAll() =>
+        Ok(await _db.Patients.Find(_ => true).ToListAsync());
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(string id)
+    {
+        var patient = await _db.Patients.Find(p => p.Id == id).FirstOrDefaultAsync();
+        return patient is null ? NotFound() : Ok(patient);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Create([FromBody] Patient patient)
+    {
+        await _db.Patients.InsertOneAsync(patient);
+        return CreatedAtAction(nameof(GetById), new { id = patient.Id }, patient);
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(string id, [FromBody] Patient updated)
+    {
+        var result = await _db.Patients.ReplaceOneAsync(p => p.Id == id, updated);
+        return result.IsAcknowledged ? NoContent() : NotFound();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(string id)
+    {
+        var result = await _db.Patients.DeleteOneAsync(p => p.Id == id);
+        return result.IsAcknowledged && result.DeletedCount > 0 ? NoContent() : NotFound();
+    }
+}

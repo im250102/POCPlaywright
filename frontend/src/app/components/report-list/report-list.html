@@ -1,0 +1,14 @@
+<h2>Informes Médicos por Paciente</h2>
+<p>Selecciona un paciente para ver sus informes:</p>
+<table>
+  <thead>
+    <tr><th>Nombre</th><th>Email</th><th>Acción</th></tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let p of patients">
+      <td>{{ p.name }}</td>
+      <td>{{ p.email }}</td>
+      <td><a [routerLink]="['/reports', p.id]" class="btn">Ver Informes</a></td>
+    </tr>
+  </tbody>
+</table>

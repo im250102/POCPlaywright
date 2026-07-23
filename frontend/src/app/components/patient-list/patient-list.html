@@ -1,0 +1,15 @@
+<h2>Pacientes</h2>
+<a routerLink="/patients/new" class="btn">Nuevo Paciente</a>
+<table>
+  <thead>
+    <tr><th>Nombre</th><th>Email</th><th>Teléfono</th><th>Acciones</th></tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let p of patients">
+      <td>{{ p.name }}</td>
+      <td>{{ p.email }}</td>
+      <td>{{ p.phone }}</td>
+      <td><button (click)="deletePatient(p.id!)">Eliminar</button></td>
+    </tr>
+  </tbody>
+</table>

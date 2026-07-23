@@ -1,0 +1,9 @@
+<h2>Nuevo Paciente</h2>
+<form #f="ngForm" (ngSubmit)="save()">
+  <label>Nombre <input [(ngModel)]="patient.name" name="name" required /></label>
+  <label>Email <input [(ngModel)]="patient.email" name="email" type="email" required /></label>
+  <label>Teléfono <input [(ngModel)]="patient.phone" name="phone" required /></label>
+  <label>Fecha de Nacimiento <input [(ngModel)]="patient.dateOfBirth" name="dateOfBirth" type="date" /></label>
+  <label>Dirección <input [(ngModel)]="patient.address" name="address" /></label>
+  <button type="submit" [disabled]="f.invalid">Guardar</button>
+</form>

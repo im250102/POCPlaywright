@@ -1,0 +1,16 @@
+h1 { text-align: center; margin: 2rem 0 0.5rem; }
+p { text-align: center; color: #94a3b8; margin-bottom: 2rem; }
+.cards { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; padding: 0 2rem; }
+.card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 2rem;
+  width: 280px;
+  text-decoration: none;
+  color: #e2e8f0;
+  transition: border-color 0.2s;
+}
+.card:hover { border-color: #38bdf8; }
+.card h2 { margin: 0 0 0.5rem; }
+.card p { margin: 0; color: #94a3b8; }
