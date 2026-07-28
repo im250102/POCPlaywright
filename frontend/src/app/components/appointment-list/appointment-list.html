@@ -1,16 +1,27 @@
-<h2>Citas Médicas</h2>
-<a routerLink="/appointments/new" class="btn">Nueva Cita</a>
+<div class="page-header">
+  <h2>Citas Médicas</h2>
+  <a routerLink="/appointments/new" class="btn">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    Nueva Cita
+  </a>
+</div>
+
 <table>
   <thead>
-    <tr><th>Paciente</th><th>Fecha</th><th>Motivo</th><th>Estado</th><th>Acción</th></tr>
+    <tr><th>Paciente</th><th>Fecha</th><th>Motivo</th><th>Estado</th><th></th></tr>
   </thead>
   <tbody>
     <tr *ngFor="let a of appointments">
-      <td>{{ a.patientName }}</td>
-      <td>{{ a.date | date:'short' }}</td>
+      <td><strong>{{ a.patientName }}</strong></td>
+      <td>{{ a.date | date:'dd/MM/yyyy HH:mm' }}</td>
       <td>{{ a.reason }}</td>
-      <td>{{ a.status }}</td>
-      <td><button (click)="deleteAppointment(a.id!)">Cancelar</button></td>
+      <td><span class="status" [class.status-scheduled]="a.status === 'Scheduled'">{{ a.status }}</span></td>
+      <td class="actions">
+        <button class="btn btn-danger" (click)="deleteAppointment(a.id!)">Cancelar</button>
+      </td>
+    </tr>
+    <tr *ngIf="appointments.length === 0">
+      <td colspan="5" class="empty">No hay citas programadas</td>
     </tr>
   </tbody>
 </table>

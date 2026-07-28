@@ -6,13 +6,18 @@ import { AppointmentList } from './components/appointment-list/appointment-list'
 import { AppointmentForm } from './components/appointment-form/appointment-form';
 import { ReportList } from './components/report-list/report-list';
 import { ReportView } from './components/report-view/report-view';
+import { Login } from './components/login/login';
+import { Register } from './components/register/register';
+import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
-  { path: '', component: Home },
-  { path: 'patients', component: PatientList },
-  { path: 'patients/new', component: PatientForm },
-  { path: 'appointments', component: AppointmentList },
-  { path: 'appointments/new', component: AppointmentForm },
-  { path: 'reports', component: ReportList },
-  { path: 'reports/:patientId', component: ReportView },
+  { path: 'login', component: Login },
+  { path: 'register', component: Register },
+  { path: '', component: Home, canActivate: [AuthGuard] },
+  { path: 'patients', component: PatientList, canActivate: [AuthGuard] },
+  { path: 'patients/new', component: PatientForm, canActivate: [AuthGuard] },
+  { path: 'appointments', component: AppointmentList, canActivate: [AuthGuard] },
+  { path: 'appointments/new', component: AppointmentForm, canActivate: [AuthGuard] },
+  { path: 'reports', component: ReportList, canActivate: [AuthGuard] },
+  { path: 'reports/:patientId', component: ReportView, canActivate: [AuthGuard] },
 ];

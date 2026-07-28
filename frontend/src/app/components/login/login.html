@@ -1,0 +1,33 @@
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-header">
+      <div class="auth-logo">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M12 2v20M2 12h20"/>
+        </svg>
+      </div>
+      <h1>Iniciar Sesión</h1>
+      <p class="auth-sub">Accede a tu panel de gestión de citas</p>
+    </div>
+
+    @if (error) {
+      <div class="auth-error">{{ error }}</div>
+    }
+
+    <form #form="ngForm" (ngSubmit)="login()" class="auth-form">
+      <label>
+        Email
+        <input type="email" name="email" [(ngModel)]="email" required email />
+      </label>
+      <label>
+        Contraseña
+        <input type="password" name="password" [(ngModel)]="password" required minlength="1" />
+      </label>
+      <button type="submit" class="btn" [disabled]="form.invalid">Iniciar Sesión</button>
+    </form>
+
+    <p class="auth-footer">
+      ¿No tienes cuenta? <a routerLink="/register">Regístrate</a>
+    </p>
+  </div>
+</div>

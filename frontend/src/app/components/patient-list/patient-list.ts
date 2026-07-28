@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Api } from '../../services/api';
@@ -13,15 +13,25 @@ import { Patient } from '../../models/patient.model';
 export class PatientList implements OnInit {
   patients: Patient[] = [];
 
-  constructor(private api: Api) {}
+  constructor(private api: Api, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
-    this.api.getPatients().subscribe((data) => (this.patients = data));
+    this.api.getPatients().subscribe({
+      next: (data) => {
+        this.patients = data;
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Error loading patients:', err),
+    });
   }
 
   deletePatient(id: string) {
-    this.api.deletePatient(id).subscribe(() => {
-      this.patients = this.patients.filter((p) => p.id !== id);
+    this.api.deletePatient(id).subscribe({
+      next: () => {
+        this.patients = this.patients.filter((p) => p.id !== id);
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Error deleting patient:', err),
     });
   }
 }

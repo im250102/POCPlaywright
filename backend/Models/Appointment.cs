@@ -9,6 +9,7 @@ public class Appointment
     [BsonRepresentation(BsonType.ObjectId)]
     public string? Id { get; set; }
 
+    public string UserId { get; set; } = string.Empty;
     public string PatientId { get; set; } = string.Empty;
     public string PatientName { get; set; } = string.Empty;
     public DateTime Date { get; set; }

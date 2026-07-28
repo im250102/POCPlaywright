@@ -1,14 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Api } from '../../services/api';
 import { Appointment } from '../../models/appointment.model';
 import { Patient } from '../../models/patient.model';
 
 @Component({
   selector: 'app-appointment-form',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './appointment-form.html',
   styleUrl: './appointment-form.css',
 })
@@ -16,10 +16,16 @@ export class AppointmentForm implements OnInit {
   patients: Patient[] = [];
   appointment: Appointment = { patientId: '', patientName: '', date: '', reason: '', status: 'Scheduled' };
 
-  constructor(private api: Api, private router: Router) {}
+  constructor(private api: Api, private router: Router, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
-    this.api.getPatients().subscribe((data) => (this.patients = data));
+    this.api.getPatients().subscribe({
+      next: (data) => {
+        this.patients = data;
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Error loading patients:', err),
+    });
   }
 
   onPatientChange() {
@@ -28,8 +34,9 @@ export class AppointmentForm implements OnInit {
   }
 
   save() {
-    this.api.createAppointment(this.appointment).subscribe(() => {
-      this.router.navigate(['/appointments']);
+    this.api.createAppointment(this.appointment).subscribe({
+      next: () => this.router.navigate(['/appointments']),
+      error: (err) => console.error('Error creating appointment:', err),
     });
   }
 }

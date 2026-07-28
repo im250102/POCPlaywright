@@ -1,15 +1,26 @@
-<h2>Pacientes</h2>
-<a routerLink="/patients/new" class="btn">Nuevo Paciente</a>
+<div class="page-header">
+  <h2>Pacientes</h2>
+  <a routerLink="/patients/new" class="btn">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    Nuevo Paciente
+  </a>
+</div>
+
 <table>
   <thead>
-    <tr><th>Nombre</th><th>Email</th><th>Teléfono</th><th>Acciones</th></tr>
+    <tr><th>Nombre</th><th>Email</th><th>Teléfono</th><th></th></tr>
   </thead>
   <tbody>
     <tr *ngFor="let p of patients">
-      <td>{{ p.name }}</td>
+      <td><strong>{{ p.name }}</strong></td>
       <td>{{ p.email }}</td>
       <td>{{ p.phone }}</td>
-      <td><button (click)="deletePatient(p.id!)">Eliminar</button></td>
+      <td class="actions">
+        <button class="btn btn-danger" (click)="deletePatient(p.id!)">Eliminar</button>
+      </td>
+    </tr>
+    <tr *ngIf="patients.length === 0">
+      <td colspan="4" class="empty">No hay pacientes registrados</td>
     </tr>
   </tbody>
 </table>

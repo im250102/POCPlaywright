@@ -1,5 +1,4 @@
 using backend.Models;
-using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
 namespace backend.Services;
@@ -20,7 +19,14 @@ public class MongoDbContext
 
         var client = new MongoClient(effectiveConnectionString);
         _database = client.GetDatabase(databaseName);
+
+        Users.Indexes.CreateOne(new CreateIndexModel<User>(
+            Builders<User>.IndexKeys.Ascending(u => u.Email),
+            new CreateIndexOptions { Unique = true }));
     }
+
+    public IMongoCollection<User> Users =>
+        _database.GetCollection<User>("Users");
 
     public IMongoCollection<Patient> Patients =>
         _database.GetCollection<Patient>("Patients");

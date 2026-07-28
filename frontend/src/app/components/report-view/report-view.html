@@ -1,22 +1,41 @@
-<h2>Informes del Paciente</h2>
+<div class="page-header">
+  <h2>Informes del Paciente</h2>
+  <a routerLink="/reports" class="btn btn-outline">Volver</a>
+</div>
 
 <button class="btn" (click)="showForm = !showForm">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
   {{ showForm ? 'Cancelar' : 'Nuevo Informe' }}
 </button>
 
-<form *ngIf="showForm" #f="ngForm" (ngSubmit)="saveReport()">
-  <label>Título <input [(ngModel)]="newReport.title" name="title" required /></label>
-  <label>Contenido <textarea [(ngModel)]="newReport.content" name="content" required></textarea></label>
-  <label>Doctor <input [(ngModel)]="newReport.doctor" name="doctor" required /></label>
-  <label>Fecha <input [(ngModel)]="newReport.date" name="date" type="date" required /></label>
-  <button type="submit" [disabled]="f.invalid">Guardar</button>
+<form *ngIf="showForm" #f="ngForm" (ngSubmit)="saveReport()" class="form-card">
+  <div class="form-row">
+    <label>Título
+      <input [(ngModel)]="newReport.title" name="title" required placeholder="Ej. Resultados de análisis" />
+    </label>
+    <label>Doctor
+      <input [(ngModel)]="newReport.doctor" name="doctor" required placeholder="Dr. López" />
+    </label>
+  </div>
+  <label>Fecha
+    <input [(ngModel)]="newReport.date" name="date" type="date" required />
+  </label>
+  <label>Contenido
+    <textarea [(ngModel)]="newReport.content" name="content" required placeholder="Describe los hallazgos, diagnóstico o recomendaciones..."></textarea>
+  </label>
+  <div class="form-actions">
+    <button type="submit" class="btn" [disabled]="f.invalid">Guardar informe</button>
+  </div>
 </form>
 
-<div class="report" *ngFor="let r of reports">
-  <h3>{{ r.title }}</h3>
-  <p class="meta">{{ r.date | date:'longDate' }} — Dr. {{ r.doctor }}</p>
-  <p>{{ r.content }}</p>
-  <button class="delete" (click)="deleteReport(r.id!)">Eliminar</button>
+<div class="reports-list">
+  <div class="report-card" *ngFor="let r of reports">
+    <div class="report-header">
+      <h3>{{ r.title }}</h3>
+      <button class="btn btn-danger" (click)="deleteReport(r.id!)">Eliminar</button>
+    </div>
+    <p class="report-meta">{{ r.date | date:'longDate' }} — Dr. {{ r.doctor }}</p>
+    <p class="report-content">{{ r.content }}</p>
+  </div>
+  <p class="empty-state" *ngIf="reports.length === 0">No hay informes para este paciente.</p>
 </div>
-
-<p *ngIf="reports.length === 0">No hay informes para este paciente.</p>

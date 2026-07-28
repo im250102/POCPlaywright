@@ -1,14 +1,22 @@
-<h2>Informes Médicos por Paciente</h2>
-<p>Selecciona un paciente para ver sus informes:</p>
+<div class="page-header">
+  <h2>Informes Médicos</h2>
+</div>
+<p class="page-desc">Selecciona un paciente para consultar o crear sus informes clínicos.</p>
+
 <table>
   <thead>
-    <tr><th>Nombre</th><th>Email</th><th>Acción</th></tr>
+    <tr><th>Nombre</th><th>Email</th><th></th></tr>
   </thead>
   <tbody>
     <tr *ngFor="let p of patients">
-      <td>{{ p.name }}</td>
+      <td><strong>{{ p.name }}</strong></td>
       <td>{{ p.email }}</td>
-      <td><a [routerLink]="['/reports', p.id]" class="btn">Ver Informes</a></td>
+      <td class="actions">
+        <a [routerLink]="['/reports', p.id]" class="btn">Ver informes</a>
+      </td>
+    </tr>
+    <tr *ngIf="patients.length === 0">
+      <td colspan="3" class="empty">No hay pacientes registrados</td>
     </tr>
   </tbody>
 </table>

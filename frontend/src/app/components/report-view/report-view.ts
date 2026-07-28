@@ -1,13 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Api } from '../../services/api';
 import { MedicalReport } from '../../models/medical-report.model';
 
 @Component({
   selector: 'app-report-view',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './report-view.html',
   styleUrl: './report-view.css',
 })
@@ -17,7 +17,7 @@ export class ReportView implements OnInit {
   newReport: MedicalReport = { patientId: '', patientName: '', title: '', content: '', date: '', doctor: '' };
   showForm = false;
 
-  constructor(private api: Api, private route: ActivatedRoute) {}
+  constructor(private api: Api, private route: ActivatedRoute, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.patientId = this.route.snapshot.paramMap.get('patientId') || '';
@@ -26,18 +26,34 @@ export class ReportView implements OnInit {
   }
 
   loadReports() {
-    this.api.getReportsByPatient(this.patientId).subscribe((data) => (this.reports = data));
+    this.api.getReportsByPatient(this.patientId).subscribe({
+      next: (data) => {
+        this.reports = data;
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Error loading reports:', err),
+    });
   }
 
   saveReport() {
-    this.api.createReport(this.newReport).subscribe(() => {
-      this.loadReports();
-      this.showForm = false;
-      this.newReport = { patientId: this.patientId, patientName: '', title: '', content: '', date: '', doctor: '' };
+    this.api.createReport(this.newReport).subscribe({
+      next: () => {
+        this.loadReports();
+        this.showForm = false;
+        this.newReport = { patientId: this.patientId, patientName: '', title: '', content: '', date: '', doctor: '' };
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Error saving report:', err),
     });
   }
 
   deleteReport(id: string) {
-    this.api.deleteReport(id).subscribe(() => this.loadReports());
+    this.api.deleteReport(id).subscribe({
+      next: () => {
+        this.loadReports();
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Error deleting report:', err),
+    });
   }
 }
