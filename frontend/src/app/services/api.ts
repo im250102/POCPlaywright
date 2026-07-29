@@ -4,10 +4,11 @@ import { Observable } from 'rxjs';
 import { Patient } from '../models/patient.model';
 import { Appointment } from '../models/appointment.model';
 import { MedicalReport } from '../models/medical-report.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class Api {
-  private base = 'http://localhost:5091/api';
+  private base = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
