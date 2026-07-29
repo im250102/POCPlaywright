@@ -5,6 +5,15 @@ import { FormsModule } from '@angular/forms';
 import { Api } from '../../services/api';
 import { MedicalReport } from '../../models/medical-report.model';
 
+function saveBlob(blob: Blob, fileName: string) {
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = fileName;
+  a.click();
+  window.URL.revokeObjectURL(url);
+}
+
 @Component({
   selector: 'app-report-view',
   imports: [CommonModule, FormsModule, RouterLink],
@@ -54,6 +63,17 @@ export class ReportView implements OnInit {
         this.cdr.detectChanges();
       },
       error: (err) => console.error('Error deleting report:', err),
+    });
+  }
+
+  exportPdf(report: MedicalReport) {
+    if (!report.id) return;
+    this.api.exportReportPdf(report.id).subscribe({
+      next: (blob) => {
+        const fileName = `informe_${report.patientName.replace(/\s+/g, '_')}_${report.date}.pdf`;
+        saveBlob(blob, fileName);
+      },
+      error: (err) => console.error('Error exporting PDF:', err),
     });
   }
 }

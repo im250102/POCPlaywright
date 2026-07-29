@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Patient } from '../models/patient.model';
 import { Appointment } from '../models/appointment.model';
@@ -49,6 +49,10 @@ export class Api {
 
   getReports(): Observable<MedicalReport[]> {
     return this.http.get<MedicalReport[]>(`${this.base}/medicalreports`);
+  }
+
+  exportReportPdf(id: string): Observable<Blob> {
+    return this.http.get(`${this.base}/medicalreports/export/${id}`, { responseType: 'blob' });
   }
 
   createReport(report: MedicalReport): Observable<MedicalReport> {

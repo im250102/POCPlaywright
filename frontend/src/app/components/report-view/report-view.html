@@ -32,7 +32,10 @@
   <div class="report-card" *ngFor="let r of reports">
     <div class="report-header">
       <h3>{{ r.title }}</h3>
-      <button class="btn btn-danger" (click)="deleteReport(r.id!)">Eliminar</button>
+      <div class="report-actions">
+        <button class="btn btn-outline" (click)="exportPdf(r)">Exportar PDF</button>
+        <button class="btn btn-danger" (click)="deleteReport(r.id!)">Eliminar</button>
+      </div>
     </div>
     <p class="report-meta">{{ r.date | date:'longDate' }} — Dr. {{ r.doctor }}</p>
     <p class="report-content">{{ r.content }}</p>
