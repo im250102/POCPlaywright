@@ -4,6 +4,15 @@ import { RouterLink } from '@angular/router';
 import { Api } from '../../services/api';
 import { Appointment } from '../../models/appointment.model';
 
+function saveBlob(blob: Blob, fileName: string) {
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = fileName;
+  a.click();
+  window.URL.revokeObjectURL(url);
+}
+
 @Component({
   selector: 'app-appointment-list',
   imports: [CommonModule, RouterLink],
@@ -22,6 +31,15 @@ export class AppointmentList implements OnInit {
         this.cdr.detectChanges();
       },
       error: (err) => console.error('Error loading appointments:', err),
+    });
+  }
+
+  exportPdf() {
+    this.api.exportAppointmentsPdf().subscribe({
+      next: (blob) => {
+        saveBlob(blob, 'citas_medicas.pdf');
+      },
+      error: (err) => console.error('Error exporting PDF:', err),
     });
   }
 

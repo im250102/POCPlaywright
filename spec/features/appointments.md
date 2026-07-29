@@ -32,3 +32,8 @@ El sistema debe permitir gestionar las citas médicas, incluyendo creación, vis
 **Dado** que el usuario está en cualquier pantalla
 **Cuando** hace clic en "Citas" en la barra lateral
 **Entonces** se muestra la pantalla de listado de citas
+
+### Escenario 5: Exportar citas a PDF
+**Dado** que el usuario está en la sección de citas
+**Cuando** hace clic en "Exportar PDF"
+**Entonces** se descarga un archivo PDF con el listado de citas del paciente

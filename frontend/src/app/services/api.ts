@@ -55,6 +55,13 @@ export class Api {
     return this.http.get(`${this.base}/medicalreports/export/${id}`, { responseType: 'blob' });
   }
 
+  exportAppointmentsPdf(patientId?: string): Observable<Blob> {
+    const url = patientId
+      ? `${this.base}/appointments/export/${patientId}`
+      : `${this.base}/appointments/export`;
+    return this.http.get(url, { responseType: 'blob' });
+  }
+
   createReport(report: MedicalReport): Observable<MedicalReport> {
     return this.http.post<MedicalReport>(`${this.base}/medicalreports`, report);
   }

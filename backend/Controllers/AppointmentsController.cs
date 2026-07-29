@@ -11,8 +11,13 @@ namespace backend.Controllers;
 public class AppointmentsController : ControllerBase
 {
     private readonly MongoDbContext _db;
+    private readonly PdfExportService _pdfExport;
 
-    public AppointmentsController(MongoDbContext db) => _db = db;
+    public AppointmentsController(MongoDbContext db, PdfExportService pdfExport)
+    {
+        _db = db;
+        _pdfExport = pdfExport;
+    }
 
     [HttpGet]
     public async Task<IActionResult> GetAll() =>
@@ -41,6 +46,20 @@ public class AppointmentsController : ControllerBase
     {
         var result = await _db.Appointments.ReplaceOneAsync(a => a.Id == id, updated);
         return result.IsAcknowledged ? NoContent() : NotFound();
+    }
+
+    [HttpGet("export/{patientId?}")]
+    public async Task<IActionResult> ExportPdf(string? patientId)
+    {
+        List<Appointment> appointments;
+
+        if (!string.IsNullOrWhiteSpace(patientId))
+            appointments = await _db.Appointments.Find(a => a.PatientId == patientId).ToListAsync();
+        else
+            appointments = await _db.Appointments.Find(_ => true).ToListAsync();
+
+        var pdfBytes = _pdfExport.GenerateAppointmentsPdf(appointments);
+        return File(pdfBytes, "application/pdf", "citas.pdf");
     }
 
     [HttpDelete("{id}")]
