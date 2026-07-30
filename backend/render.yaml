@@ -1,7 +1,7 @@
 services:
   - type: web
     name: pocplaywright-backend
-    runtime: image
+    runtime: docker
     repo: https://github.com/im250102/POCPlaywright
     plan: free
     dockerfilePath: backend/Dockerfile
