@@ -2,14 +2,15 @@ services:
   - type: web
     name: pocplaywright-backend
     runtime: image
-    repo: https://github.com/tu-usuario/tu-repo
+    repo: https://github.com/im250102/POCPlaywright
     plan: free
     dockerfilePath: ./Dockerfile
     envVars:
       - key: ASPNETCORE_ENVIRONMENT
         value: Production
       - key: ConnectionStrings__MongoDb
-        sync: false
+        value: mongodb+srv://ignaciomartin1083_db_user:rkODcehQ9TPm5cCs@nachoia.km2bzbn.mongodb.net/?appName=NachoIA
+        sync:true
       - key: DatabaseName
         value: POCPlaywright
       - key: Jwt__Key

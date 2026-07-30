@@ -1,7 +1,10 @@
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+ENV DOTNET_USE_POLLING_FILE_WATCHER=true
 WORKDIR /src
+COPY backend/*.csproj .
+RUN dotnet restore
 COPY backend/ .
-RUN dotnet restore && dotnet publish -c Release -o /app
+RUN dotnet publish -c Release -o /app
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
 WORKDIR /app
