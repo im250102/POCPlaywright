@@ -9,12 +9,11 @@ services:
       - key: ASPNETCORE_ENVIRONMENT
         value: Production
       - key: ConnectionStrings__MongoDb
-        value: mongodb+srv://ignaciomartin1083_db_user:rkODcehQ9TPm5cCs@nachoia.km2bzbn.mongodb.net/?appName=NachoIA
-    
+        value: mongodb+srv://ignaciomartin1083_db_user:rkODcehQ9TPm5cCs@nachoia.km2bzbn.mongodb.net/?appName=NachoIA    
       - key: DatabaseName
         value: POCPlaywright
       - key: Jwt__Key
-        sync: false
+        value: POCPlaywright_SuperSecretKey_2026_MinLength32Chars!
       - key: Jwt__Issuer
         value: POCPlaywright
       - key: Jwt__Audience
