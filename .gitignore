@@ -10,6 +10,7 @@ frontend/dist/
 
 # Test results
 test-results/
+playwright/test-report.md
 
 # IDE
 .vscode/

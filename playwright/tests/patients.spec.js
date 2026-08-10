@@ -40,4 +40,37 @@ test.describe('Navegación - Pacientes', () => {
     await page.locator('nav a').nth(1).click();
     await expect(page).toHaveURL('/patients');
   });
+
+  test('debe crear un nuevo paciente correctamente', async ({ page }) => {
+    const unique = Date.now();
+    const newPatient = {
+      name: `Paciente Test ${unique}`,
+      email: `paciente${unique}@test.com`,
+      phone: '+52 55 1234 5678',
+      dateOfBirth: '1990-05-15',
+      address: 'Calle Prueba 123, Ciudad',
+    };
+
+    await page.goto('/patients/new');
+
+    await page.fill('input[name="name"]', newPatient.name);
+    await page.fill('input[name="email"]', newPatient.email);
+    await page.fill('input[name="phone"]', newPatient.phone);
+    await page.fill('input[name="dateOfBirth"]', newPatient.dateOfBirth);
+    await page.fill('input[name="address"]', newPatient.address);
+
+    const submit = page.locator('button[type="submit"]');
+    await expect(submit).toBeEnabled();
+    await submit.click();
+
+    await expect(page).toHaveURL('/patients');
+
+    const createdRow = page.locator('tbody tr', { hasText: newPatient.name });
+    await expect(createdRow).toBeVisible();
+    await expect(createdRow).toContainText(newPatient.email);
+    await expect(createdRow).toContainText(newPatient.phone);
+
+    await createdRow.locator('button.btn-danger').click();
+    await expect(createdRow).toHaveCount(0);
+  });
 });

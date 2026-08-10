@@ -55,4 +55,43 @@ test.describe('Navegación - Citas', () => {
       expect(download.suggestedFilename()).toMatch(/\.pdf$/i);
     }
   });
+
+  test('debe crear una nueva cita correctamente', async ({ page }) => {
+    const unique = Date.now();
+    const patient = {
+      name: `Paciente Cita ${unique}`,
+      email: `citapaciente${unique}@test.com`,
+      phone: '+52 55 9876 5432',
+      dateOfBirth: '1985-03-12',
+      address: 'Av. Consulta 456, Ciudad',
+    };
+
+    const createPatient = await page.request.post('http://localhost:5091/api/patients', {
+      data: patient,
+    });
+    expect(createPatient.ok()).toBeTruthy();
+    const createdPatient = await createPatient.json();
+
+    const reason = `Motivo de consulta ${unique}`;
+    await page.goto('/appointments/new');
+
+    await page.selectOption('select[name="patientId"]', createdPatient.id);
+    await page.fill('input[name="date"]', '2026-08-20T10:30');
+    await page.fill('textarea[name="reason"]', reason);
+
+    const submit = page.locator('button[type="submit"]');
+    await expect(submit).toBeEnabled();
+    await submit.click();
+
+    await expect(page).toHaveURL('/appointments');
+
+    const createdRow = page.locator('tbody tr', { hasText: patient.name });
+    await expect(createdRow).toBeVisible();
+    await expect(createdRow).toContainText(reason);
+
+    await createdRow.locator('button.btn-danger').click();
+    await expect(createdRow).toHaveCount(0);
+
+    await page.request.delete(`http://localhost:5091/api/patients/${createdPatient.id}`);
+  });
 });
