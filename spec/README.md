@@ -1,4 +1,4 @@
-# Spec-Driven Development
+np# Spec-Driven Development
 
 Este directorio contiene la especificación formal del proyecto **POCPlaywright**, siguiendo la metodología **Spec-Driven Development (SDD)**.
 

@@ -38,6 +38,8 @@ builder.Services.AddSingleton(sp =>
 });
 
 builder.Services.AddSingleton<PdfExportService>();
+builder.Services.AddSingleton<PatientNotificationService>();
+builder.Services.AddHttpClient("Notifications");
 
 builder.Services.AddCors(options =>
 {

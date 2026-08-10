@@ -11,8 +11,13 @@ namespace backend.Controllers;
 public class PatientsController : ControllerBase
 {
     private readonly MongoDbContext _db;
+    private readonly PatientNotificationService _notifications;
 
-    public PatientsController(MongoDbContext db) => _db = db;
+    public PatientsController(MongoDbContext db, PatientNotificationService notifications)
+    {
+        _db = db;
+        _notifications = notifications;
+    }
 
     [HttpGet]
     public async Task<IActionResult> GetAll() =>
@@ -29,6 +34,7 @@ public class PatientsController : ControllerBase
     public async Task<IActionResult> Create([FromBody] Patient patient)
     {
         await _db.Patients.InsertOneAsync(patient);
+        _ = _notifications.SendWelcomeMessageAsync(patient);
         return CreatedAtAction(nameof(GetById), new { id = patient.Id }, patient);
     }
 

@@ -73,4 +73,58 @@ test.describe('Navegación - Pacientes', () => {
     await createdRow.locator('button.btn-danger').click();
     await expect(createdRow).toHaveCount(0);
   });
+
+  test('debe enviar mensaje de bienvenida al crear un paciente', async ({ page }) => {
+    const unique = Date.now();
+    const newPatient = {
+      name: `Paciente Notif ${unique}`,
+      email: `pacientenotif${unique}@test.com`,
+      phone: '+34684335606',
+      dateOfBirth: '1988-08-20',
+      address: 'Calle Notificación 789, Ciudad',
+    };
+
+    await page.goto('/patients/new');
+
+    await page.fill('input[name="name"]', newPatient.name);
+    await page.fill('input[name="email"]', newPatient.email);
+    await page.fill('input[name="phone"]', newPatient.phone);
+    await page.fill('input[name="dateOfBirth"]', newPatient.dateOfBirth);
+    await page.fill('input[name="address"]', newPatient.address);
+
+    const submit = page.locator('button[type="submit"]');
+    await expect(submit).toBeEnabled();
+    await submit.click();
+
+    await expect(page).toHaveURL('/patients');
+
+    const createdRow = page.locator('tbody tr', { hasText: newPatient.name });
+    await expect(createdRow).toBeVisible();
+
+    const listRes = await page.request.get('http://localhost:5091/api/patients');
+    expect(listRes.ok()).toBeTruthy();
+    const patients = await listRes.json();
+    const created = patients.find((p) => p.email === newPatient.email);
+    expect(created).toBeTruthy();
+
+    await expect
+      .poll(async () => {
+        const res = await page.request.get(
+          `http://localhost:5091/api/notifications/by-patient/${created.id}`
+        );
+        if (!res.ok()) return [];
+        return res.json();
+      })
+      .toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            phone: newPatient.phone,
+            message: expect.stringContaining('dado de alta'),
+            status: expect.stringMatching(/^(sent|skipped|failed)$/),
+          }),
+        ])
+      );
+
+    await page.request.delete(`http://localhost:5091/api/patients/${created.id}`);
+  });
 });

@@ -36,4 +36,7 @@ public class MongoDbContext
 
     public IMongoCollection<MedicalReport> MedicalReports =>
         _database.GetCollection<MedicalReport>("MedicalReports");
+
+    public IMongoCollection<NotificationLog> NotificationLogs =>
+        _database.GetCollection<NotificationLog>("NotificationLogs");
 }
