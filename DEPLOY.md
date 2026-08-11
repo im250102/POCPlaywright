@@ -42,6 +42,9 @@
 | `Jwt__Key` | `UnaClaveSuperSeguraDeAlMenos32Caracteres!2026` |
 | `Jwt__Issuer` | `POCPlaywright` |
 | `Jwt__Audience` | `POCPlaywright` |
+| `Notifications__Provider` | `telegram` |
+| `Notifications__TelegramBotToken` | Token del bot de @BotFather (p. ej. `8762820966:AA...`) |
+| `Notifications__TelegramChatId` | Chat ID numérico obtenido con `getUpdates` (p. ej. `2032361136`) |
 
 5. Haz clic en **Create Web Service**
 
@@ -54,7 +57,15 @@ Si prefieres conectar el repo directamente con el archivo `render.yaml` ya inclu
 
 1. En Render dashboard → **New +** → **Blueprint**
 2. Conecta tu repo — Render detectará automáticamente el `render.yaml`
-3. Te pedirá llenar los valores de las variables marcadas como `sync: false`
+3. Te pedirá llenar los valores de las variables marcadas como `sync: false` (incluye `ConnectionStrings__MongoDb`, `Jwt__Key`, `Notifications__TelegramBotToken` y `Notifications__TelegramChatId`)
+
+---
+
+### Notas sobre las notificaciones de Telegram
+
+- `Notifications__TelegramBotToken` y `Notifications__TelegramChatId` están marcadas como `sync: false` en `render.yaml` para **no commitear los secretos**. Render te las pedirá al crear el Blueprint.
+- El envío a `api.telegram.org` funciona en Render porque corre fuera de la red corporativa (sin el proxy Zscaler). En local queda descartado por política de seguridad corporativa.
+- `Notifications__WelcomeMessage` se toma de `appsettings.json` (incluido en la imagen Docker), no hace falta definirlo en Render.
 
 ---
 

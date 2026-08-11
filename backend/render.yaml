@@ -20,3 +20,9 @@ services:
         value: POCPlaywright
       - key: Jwt__TokenExpiryMinutes
         value: 60
+      - key: Notifications__Provider
+        value: telegram
+      - key: Notifications__TelegramBotToken
+        sync: false
+      - key: Notifications__TelegramChatId
+        sync: false
