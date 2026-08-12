@@ -38,10 +38,11 @@ test.describe('Navegación - Home', () => {
 
   test('la barra de navegación debe tener todos los enlaces', async ({ page }) => {
     const navLinks = page.locator('nav a');
-    await expect(navLinks).toHaveCount(4);
+    await expect(navLinks).toHaveCount(5);
     await expect(navLinks.nth(0)).toHaveText('Inicio');
     await expect(navLinks.nth(1)).toHaveText('Pacientes');
     await expect(navLinks.nth(2)).toHaveText('Citas');
     await expect(navLinks.nth(3)).toHaveText('Informes');
+    await expect(navLinks.nth(4)).toHaveText('Administración usuarios');
   });
 });

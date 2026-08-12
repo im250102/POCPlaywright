@@ -1,0 +1,58 @@
+<div class="page-header">
+  <h2>Administración usuarios</h2>
+</div>
+<p class="page-desc">Listado de usuarios de la web y sus accesos.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Email</th>
+      <th>Rol</th>
+      <th>Fecha de registro</th>
+      <th>Último acceso</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let u of users">
+      <td><strong>{{ u.name }}</strong></td>
+      <td>{{ u.email }}</td>
+      <td>
+        <select [value]="u.role" (change)="onRoleChange(u, $event)" class="role-select">
+          <option value="Admin">Admin</option>
+          <option value="Medico">Medico</option>
+        </select>
+      </td>
+      <td>{{ u.createdAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+      <td class="latest-access">{{ u.lastLoginAt ? (u.lastLoginAt | date: 'dd/MM/yyyy HH:mm') : '—' }}</td>
+      <td class="actions">
+        <button class="btn btn-outline" (click)="showAccesses(u)">Ver accesos</button>
+      </td>
+    </tr>
+    <tr *ngIf="users.length === 0">
+      <td colspan="6" class="empty">No hay usuarios registrados</td>
+    </tr>
+  </tbody>
+</table>
+
+@if (selectedUser) {
+  <section class="access-panel">
+    <h3>Accesos a la web de {{ selectedUser.name }}</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Fecha de acceso</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let a of accesses">
+          <td>{{ a.loginAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+        </tr>
+        <tr *ngIf="accesses.length === 0">
+          <td class="empty">No hay accesos registrados</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+}

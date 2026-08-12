@@ -9,6 +9,7 @@ export interface AuthUser {
   id: string;
   name: string;
   email: string;
+  role: string;
   token: string;
 }
 
@@ -79,6 +80,7 @@ export class AuthService {
         id: decodedUser.id ?? '',
         name: decodedUser.name ?? '',
         email: decodedUser.email ?? '',
+        role: decodedUser.role ?? 'Medico',
         token
       };
       this.setUser(fallbackUser);
@@ -130,7 +132,8 @@ export class AuthService {
       return {
         id: decodedPayload.nameid ?? decodedPayload.sub ?? decodedPayload.id ?? '',
         name: decodedPayload.name ?? '',
-        email: decodedPayload.email ?? ''
+        email: decodedPayload.email ?? '',
+        role: decodedPayload.role ?? 'Medico'
       };
     } catch {
       return {};

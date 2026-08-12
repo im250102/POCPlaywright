@@ -39,11 +39,13 @@ public class AuthController : ControllerBase
         if (existing is not null)
             return BadRequest(new { error = "El email ya está registrado" });
 
+        var userCount = await _db.Users.CountDocumentsAsync(_ => true);
         var user = new User
         {
             Name = request.Name.Trim(),
             Email = normalizedEmail,
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
+            Role = userCount == 0 ? "Admin" : "Medico",
             CreatedAt = DateTime.UtcNow
         };
 
@@ -56,6 +58,7 @@ public class AuthController : ControllerBase
             Id = user.Id ?? string.Empty,
             Name = user.Name,
             Email = user.Email,
+            Role = user.Role,
             Token = token
         });
     }
@@ -74,6 +77,16 @@ public class AuthController : ControllerBase
         if (!BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
             return Unauthorized(new { error = "Credenciales inválidas" });
 
+        await _db.Users.UpdateOneAsync(
+            u => u.Id == user.Id,
+            Builders<User>.Update.Set(u => u.LastLoginAt, DateTime.UtcNow));
+
+        await _db.UserAccesses.InsertOneAsync(new UserAccess
+        {
+            UserId = user.Id ?? string.Empty,
+            LoginAt = DateTime.UtcNow
+        });
+
         var token = GenerateToken(user);
 
         return Ok(new AuthResponse
@@ -81,6 +94,7 @@ public class AuthController : ControllerBase
             Id = user.Id ?? string.Empty,
             Name = user.Name,
             Email = user.Email,
+            Role = user.Role,
             Token = token
         });
     }
@@ -95,7 +109,8 @@ public class AuthController : ControllerBase
         {
             new Claim(ClaimTypes.NameIdentifier, user.Id!),
             new Claim(ClaimTypes.Name, user.Name),
-            new Claim(ClaimTypes.Email, user.Email)
+            new Claim(ClaimTypes.Email, user.Email),
+            new Claim("role", user.Role)
         };
 
         var tokenLifetimeMinutes = _config.GetValue("Jwt:TokenExpiryMinutes", 60);

@@ -19,5 +19,28 @@ public class AuthResponse
     public string Id { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
+    public string Role { get; set; } = string.Empty;
     public string Token { get; set; } = string.Empty;
+}
+
+public class UserDto
+{
+    public string Id { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    public string Role { get; set; } = string.Empty;
+    public DateTime CreatedAt { get; set; }
+    public DateTime? LastLoginAt { get; set; }
+}
+
+public class UserAccessDto
+{
+    public string Id { get; set; } = string.Empty;
+    public string UserId { get; set; } = string.Empty;
+    public DateTime LoginAt { get; set; }
+}
+
+public class UpdateRoleRequest
+{
+    public string Role { get; set; } = string.Empty;
 }

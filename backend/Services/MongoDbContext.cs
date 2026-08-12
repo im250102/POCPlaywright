@@ -25,6 +25,9 @@ public class MongoDbContext
             new CreateIndexOptions { Unique = true }));
     }
 
+    public IMongoCollection<UserAccess> UserAccesses =>
+        _database.GetCollection<UserAccess>("UserAccesses");
+
     public IMongoCollection<User> Users =>
         _database.GetCollection<User>("Users");
 

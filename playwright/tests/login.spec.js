@@ -40,7 +40,7 @@ test.describe('Login', () => {
     const { registerTestUser, loginAndSetup } = await import('./auth.helper.js');
     await registerTestUser(request);
     await page.goto('/login');
-    await page.fill('input[type="email"]', 'test@playwright.com');
+    await page.fill('input[type="email"]', 'ignacio@medico.es');
     await page.fill('input[type="password"]', 'TestPass123!');
     await page.click('button[type="submit"]');
     await expect(page).toHaveURL('/');

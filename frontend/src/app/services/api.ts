@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Patient } from '../models/patient.model';
 import { Appointment } from '../models/appointment.model';
 import { MedicalReport } from '../models/medical-report.model';
+import { UserItem, UserAccessItem } from '../models/user.model';
 import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
@@ -69,5 +70,17 @@ export class Api {
 
   deleteReport(id: string): Observable<void> {
     return this.http.delete<void>(`${this.base}/medicalreports/${id}`);
+  }
+
+  getUsers(): Observable<UserItem[]> {
+    return this.http.get<UserItem[]>(`${this.base}/users`);
+  }
+
+  getUserAccesses(userId: string): Observable<UserAccessItem[]> {
+    return this.http.get<UserAccessItem[]>(`${this.base}/users/${userId}/accesses`);
+  }
+
+  updateUserRole(userId: string, role: string): Observable<void> {
+    return this.http.put<void>(`${this.base}/users/${userId}/role`, { role });
   }
 }

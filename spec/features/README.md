@@ -11,3 +11,5 @@ Cada archivo describe una feature con sus criterios de aceptación y escenarios 
 | `patients.md` | Gestión de Pacientes | Alta |
 | `appointments.md` | Gestión de Citas | Alta |
 | `reports.md` | Gestión de Informes Médicos | Alta |
+| `login.md` | Autenticación y Registro de Profesionales | Alta |
+| `user.md` | Roles de Usuario y Administración de Usuarios | Alta |

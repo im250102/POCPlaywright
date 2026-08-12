@@ -1,8 +1,8 @@
 const API_BASE = 'http://localhost:5091/api/auth';
 
 const TEST_USER = {
-  name: 'Test User',
-  email: 'test@playwright.com',
+  name: 'Ignacio',
+  email: 'ignacio@medico.es',
   password: 'TestPass123!',
 };
 

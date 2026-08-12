@@ -8,7 +8,9 @@ import { ReportList } from './components/report-list/report-list';
 import { ReportView } from './components/report-view/report-view';
 import { Login } from './components/login/login';
 import { Register } from './components/register/register';
+import { UserList } from './components/user-list/user-list';
 import { AuthGuard } from './guards/auth.guard';
+import { AdminGuard } from './guards/admin.guard';
 
 export const routes: Routes = [
   { path: 'login', component: Login },
@@ -20,4 +22,5 @@ export const routes: Routes = [
   { path: 'appointments/new', component: AppointmentForm, canActivate: [AuthGuard] },
   { path: 'reports', component: ReportList, canActivate: [AuthGuard] },
   { path: 'reports/:patientId', component: ReportView, canActivate: [AuthGuard] },
+  { path: 'users', component: UserList, canActivate: [AuthGuard, AdminGuard] },
 ];
