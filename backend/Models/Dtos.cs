@@ -44,3 +44,15 @@ public class UpdateRoleRequest
 {
     public string Role { get; set; } = string.Empty;
 }
+
+public class AppointmentCalendarDto
+{
+    public string Id { get; set; } = string.Empty;
+    public string UserId { get; set; } = string.Empty;
+    public string DoctorName { get; set; } = string.Empty;
+    public string PatientId { get; set; } = string.Empty;
+    public string PatientName { get; set; } = string.Empty;
+    public DateTime Date { get; set; }
+    public string Reason { get; set; } = string.Empty;
+    public string Status { get; set; } = string.Empty;
+}

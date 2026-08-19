@@ -34,6 +34,32 @@ public class AppointmentsController : ControllerBase
     public async Task<IActionResult> GetByPatient(string patientId) =>
         Ok(await _db.Appointments.Find(a => a.PatientId == patientId).ToListAsync());
 
+    [HttpGet("calendar")]
+    public async Task<IActionResult> GetCalendar()
+    {
+        var appointments = await _db.Appointments.Find(_ => true).ToListAsync();
+
+        var userMap = (await _db.Users.Find(_ => true).ToListAsync())
+            .Where(u => !string.IsNullOrWhiteSpace(u.Id))
+            .ToDictionary(u => u.Id!, u => u.Name);
+
+        var result = appointments.Select(a => new AppointmentCalendarDto
+        {
+            Id = a.Id ?? string.Empty,
+            UserId = a.UserId,
+            DoctorName = !string.IsNullOrWhiteSpace(a.UserId) && userMap.TryGetValue(a.UserId, out var name)
+                ? name
+                : "Sin asignar",
+            PatientId = a.PatientId,
+            PatientName = a.PatientName,
+            Date = a.Date,
+            Reason = a.Reason,
+            Status = a.Status
+        });
+
+        return Ok(result);
+    }
+
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] Appointment appointment)
     {

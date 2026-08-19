@@ -1,0 +1,49 @@
+<div class="page-header">
+  <h2>Calendario de Citas</h2>
+  <a routerLink="/appointments" class="btn btn-outline">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 14 4 9 9 4"/><path d="M20 20v-7a4 4 0 0 0-4-4H4"/></svg>
+    Volver
+  </a>
+</div>
+
+<div class="calendar-toolbar">
+  <button class="btn btn-outline" (click)="prevMonth()">‹ Anterior</button>
+  <span class="calendar-month">{{ monthLabel }}</span>
+  <button class="btn btn-outline" (click)="nextMonth()">Siguiente ›</button>
+</div>
+
+<div class="calendar">
+  <div class="calendar-weekdays">
+    <span>Lun</span>
+    <span>Mar</span>
+    <span>Mié</span>
+    <span>Jue</span>
+    <span>Vie</span>
+    <span>Sáb</span>
+    <span>Dom</span>
+  </div>
+  <div class="calendar-grid">
+    <ng-container *ngFor="let week of weeks">
+      <div
+        class="calendar-day"
+        *ngFor="let day of week"
+        [class.outside]="!isCurrentMonth(day)"
+        [class.today]="isToday(day)"
+      >
+        <span class="day-number">{{ day | date:'d' }}</span>
+        <div class="day-events">
+          <div class="event" *ngFor="let a of appointmentsFor(day)">
+            <span class="event-time">{{ a.date | date:'HH:mm' }}</span>
+            <strong class="event-patient">{{ a.patientName }}</strong>
+            <span class="event-reason">{{ a.reason }}</span>
+            <span class="event-doctor">{{ a.doctorName }}</span>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<div class="calendar-empty" *ngIf="appointments.length === 0">
+  No hay citas para este mes
+</div>

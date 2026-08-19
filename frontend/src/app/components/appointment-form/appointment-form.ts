@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { Api } from '../../services/api';
+import { AuthService } from '../../services/auth.service';
 import { Appointment } from '../../models/appointment.model';
 import { Patient } from '../../models/patient.model';
 
@@ -16,9 +17,10 @@ export class AppointmentForm implements OnInit {
   patients: Patient[] = [];
   appointment: Appointment = { patientId: '', patientName: '', date: '', reason: '', status: 'Scheduled' };
 
-  constructor(private api: Api, private router: Router, private cdr: ChangeDetectorRef) {}
+  constructor(private api: Api, private router: Router, private cdr: ChangeDetectorRef, private auth: AuthService) {}
 
   ngOnInit() {
+    this.appointment.userId = this.auth.user?.id ?? '';
     this.api.getPatients().subscribe({
       next: (data) => {
         this.patients = data;

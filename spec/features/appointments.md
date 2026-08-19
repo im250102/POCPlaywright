@@ -10,6 +10,7 @@ El sistema debe permitir gestionar las citas médicas, incluyendo creación, vis
 - El usuario puede cancelar una cita existente
 - El formulario de creación debe ser inválido si no se completa correctamente
 - La navegación hacia la sección de citas debe funcionar desde cualquier parte de la aplicación
+- El usuario puede ver un calendario mensual con todas las citas existentes de todos los pacientes y de todos los médicos
 
 ## Escenarios
 
@@ -37,3 +38,9 @@ El sistema debe permitir gestionar las citas médicas, incluyendo creación, vis
 **Dado** que el usuario está en la sección de citas
 **Cuando** hace clic en "Exportar PDF"
 **Entonces** se descarga un archivo PDF con el listado de citas del paciente
+
+### Escenario 6: Visualizar calendario mensual de citas
+**Dado** que el usuario está en la sección de citas y existen citas ya creadas
+**Cuando** hace clic en "Calendario"
+**Entonces** ve un componente de calendario mensual que muestra todas las citas existentes de todos los pacientes y de todos los médicos
+**Y** cada cita aparece en el día y hora correspondiente mostrando el nombre del paciente y el motivo de la consulta

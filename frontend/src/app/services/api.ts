@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Patient } from '../models/patient.model';
-import { Appointment } from '../models/appointment.model';
+import { Appointment, CalendarAppointment } from '../models/appointment.model';
 import { MedicalReport } from '../models/medical-report.model';
 import { UserItem, UserAccessItem } from '../models/user.model';
 import { environment } from '../../environments/environment';
@@ -31,6 +31,10 @@ export class Api {
 
   getAppointments(): Observable<Appointment[]> {
     return this.http.get<Appointment[]>(`${this.base}/appointments`);
+  }
+
+  getCalendarAppointments(): Observable<CalendarAppointment[]> {
+    return this.http.get<CalendarAppointment[]>(`${this.base}/appointments/calendar`);
   }
 
   getAppointmentsByPatient(patientId: string): Observable<Appointment[]> {
