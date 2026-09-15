@@ -28,6 +28,7 @@
       <td class="latest-access">{{ u.lastLoginAt ? (u.lastLoginAt | date: 'dd/MM/yyyy HH:mm') : '—' }}</td>
       <td class="actions">
         <button class="btn btn-outline" (click)="showAccesses(u)">Ver accesos</button>
+        <button class="btn btn-danger" (click)="deleteUser(u)" [disabled]="!canDelete(u)">Eliminar</button>
       </td>
     </tr>
     <tr *ngIf="users.length === 0">

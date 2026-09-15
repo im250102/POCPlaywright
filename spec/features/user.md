@@ -1,7 +1,7 @@
 # Feature: Roles de Usuario y Administración de Usuarios
 
 ## Descripción
-El sistema debe disponer de diferentes tipos de usuarios. Existirá un usuario administrador con el perfil de **Director de la clínica** y el resto de usuarios serán los **médicos** que trabajan en la clínica. Cuando el perfil Director accede a la web, podrá visualizar una nueva pantalla, accesible junto al nombre del usuario (sección "Administración usuarios"), donde se mostrará un listado de los usuarios de la web junto con el listado de accesos a la web de cada uno.
+El sistema debe disponer de diferentes tipos de usuarios. Existirá un usuario administrador con el perfil de **Director de la clínica** y el resto de usuarios serán los **médicos** que trabajan en la clínica. Cuando el perfil Director accede a la web, podrá visualizar una nueva pantalla, accesible junto al nombre del usuario (sección "Administración usuarios"), donde se mostrará un listado de los usuarios de la web junto con el listado de accesos a la web de cada uno. El Director también podrá eliminar usuarios de la aplicación.
 
 ## Criterios de Aceptación
 
@@ -16,6 +16,10 @@ El sistema debe disponer de diferentes tipos de usuarios. Existirá un usuario a
 - Cada inicio de sesión de un usuario queda registrado en el sistema
 - Solo el rol Admin puede acceder al listado de usuarios; el resto recibe 403 Forbidden
 - El Director puede cambiar el rol de un usuario (convertir a un médico en Director y viceversa)
+- El Director puede eliminar un usuario del sistema
+- El Director no puede eliminar su propio usuario
+- No se puede eliminar al último usuario con rol `Admin` del sistema
+- Al eliminar un usuario se eliminan también sus registros de accesos (`UserAccess`)
 - La API rechaza peticiones sin token con 401 Unauthorized
 
 ## Modelo de Datos
@@ -115,6 +119,19 @@ Cambiar el rol de un usuario.
 - 400 si el rol no es válido (`Admin` | `Medico`)
 - 404 si el usuario no existe
 
+### DELETE /api/users/{id}
+Elimina un usuario del sistema. También elimina los registros de accesos (`UserAccess`) asociados a ese usuario.
+
+**Headers:** `Authorization: Bearer <token>`
+
+**Response:** 204 No Content
+
+**Errores:**
+- 401 si no hay token válido
+- 403 si el rol del token no es `Admin`
+- 400 si el usuario intenta eliminarse a sí mismo o si se intenta eliminar al último usuario con rol `Admin`
+- 404 si el usuario no existe
+
 ## Frontend
 
 ### Sidebar
@@ -129,6 +146,9 @@ Cambiar el rol de un usuario.
 - Cada fila tiene un botón "Ver accesos" que muestra el listado de accesos a la web del usuario
 - El listado de accesos muestra la fecha y hora de cada inicio de sesión
 - Para cada fila, el rol se puede modificar mediante un control de cambio de rol
+- Para cada fila existe un botón "Eliminar" que elimina al usuario tras una confirmación
+- El botón "Eliminar" está deshabilitado para el propio usuario autenticado y para el último administrador
+- Tras eliminar un usuario, la fila desaparece del listado
 - La ruta `/users` está protegida: solo accesible si la sesión es Admin
 
 ## Escenarios
@@ -170,3 +190,23 @@ Cambiar el rol de un usuario.
 **Cuando** cambia el rol de un Médico a Admin
 **Entonces** el sistema guarda el nuevo rol
 **Y** el listado refleja el cambio
+
+### Escenario 8: El Director elimina a un Médico
+**Dado** que el Director está en la sección de administración de usuarios
+**Y** que existe un usuario con rol Médico
+**Cuando** hace clic en "Eliminar" en la fila de ese usuario y confirma la operación
+**Entonces** el usuario desaparece del listado
+**Y** sus registros de accesos también se eliminan
+
+### Escenario 9: El Director no puede eliminar su propio usuario
+**Dado** que el Director está en la sección de administración de usuarios
+**Cuando** intenta eliminar su propio usuario
+**Entonces** la operación se rechaza con un error 400
+**Y** el usuario permanece en el listado
+
+### Escenario 10: No se puede eliminar al último administrador
+**Dado** que existe un único usuario con rol `Admin`
+**Cuando** se intenta eliminar a ese administrador
+**Entonces** la operación se rechaza con un error 400
+**Y** el administrador permanece en el listado
+**Y** el sistema garantiza que siempre queda al menos un administrador

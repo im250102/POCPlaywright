@@ -118,4 +118,62 @@ test.describe('Administración de Usuarios', () => {
     const updated = updatedUsers.find((u) => u.id === target.id);
     expect(updated.role).toBe('Admin');
   });
+
+  test('Escenario 8: El Director elimina a un Médico', async ({ request, page }) => {
+    const unique = Date.now();
+    const email = `medicoeliminar${unique}@test.com`;
+    await createUser(request, `Médico Eliminar ${unique}`, email);
+    await loginAndSetup(page);
+
+    await page.goto('/users');
+    const row = page.locator('tbody tr', { hasText: email });
+    await expect(row).toBeVisible();
+
+    page.once('dialog', (dialog) => dialog.accept());
+    await row.locator('button', { hasText: 'Eliminar' }).click();
+
+    await expect(page.locator('tbody tr', { hasText: email })).toHaveCount(0);
+  });
+
+  test('Escenario 9: El Director no puede eliminar su propio usuario', async ({ request }) => {
+    const admin = await login(request, 'ignacio@medico.es', 'TestPass123!');
+    expect(admin.body).not.toBeNull();
+
+    const deleteResponse = await request.delete(`${API_BASE}/users/${admin.body.id}`, {
+      headers: { Authorization: `Bearer ${admin.body.token}` },
+    });
+    expect(deleteResponse.status()).toBe(400);
+  });
+
+  test('Escenario 10: El sistema protege al último administrador', async ({ request }) => {
+    const unique = Date.now();
+    const email = `admineliminar${unique}@test.com`;
+    await createUser(request, `Admin Eliminar ${unique}`, email);
+
+    const admin = await login(request, 'ignacio@medico.es', 'TestPass123!');
+    expect(admin.body).not.toBeNull();
+    const adminToken = admin.body.token;
+
+    const usersResponse = await request.get(`${API_BASE}/users`, {
+      headers: { Authorization: `Bearer ${adminToken}` },
+    });
+    const users = await usersResponse.json();
+    const target = users.find((u) => u.email === email);
+    expect(target).toBeTruthy();
+
+    await request.put(`${API_BASE}/users/${target.id}/role`, {
+      headers: { Authorization: `Bearer ${adminToken}` },
+      data: { role: 'Admin' },
+    });
+
+    const deleteResponse = await request.delete(`${API_BASE}/users/${target.id}`, {
+      headers: { Authorization: `Bearer ${adminToken}` },
+    });
+    expect(deleteResponse.status()).toBe(204);
+
+    const remaining = await (await request.get(`${API_BASE}/users`, {
+      headers: { Authorization: `Bearer ${adminToken}` },
+    })).json();
+    expect(remaining.some((u) => u.email === email)).toBeFalsy();
+  });
 });

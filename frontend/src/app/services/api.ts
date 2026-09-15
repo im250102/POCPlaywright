@@ -89,6 +89,10 @@ export class Api {
     return this.http.put<void>(`${this.base}/users/${userId}/role`, { role });
   }
 
+  deleteUser(userId: string): Observable<void> {
+    return this.http.delete<void>(`${this.base}/users/${userId}`);
+  }
+
   getPosts(category?: string): Observable<BlogPost[]> {
     const url = category
       ? `${this.base}/blog?category=${encodeURIComponent(category)}`

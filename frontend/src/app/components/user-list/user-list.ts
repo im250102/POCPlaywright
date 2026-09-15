@@ -13,11 +13,34 @@ export class UserList implements OnInit {
   users: UserItem[] = [];
   selectedUser: UserItem | null = null;
   accesses: UserAccessItem[] = [];
+  currentUserId = '';
 
   constructor(private api: Api, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
+    this.currentUserId = this.getCurrentUserId();
     this.loadUsers();
+  }
+
+  private getCurrentUserId(): string {
+    try {
+      const stored = localStorage.getItem('auth_user');
+      return stored ? (JSON.parse(stored).id ?? '') : '';
+    } catch {
+      return '';
+    }
+  }
+
+  isSelf(user: UserItem): boolean {
+    return user.id === this.currentUserId;
+  }
+
+  isLastAdmin(user: UserItem): boolean {
+    return user.role === 'Admin' && this.users.filter((u) => u.role === 'Admin').length <= 1;
+  }
+
+  canDelete(user: UserItem): boolean {
+    return !this.isSelf(user) && !this.isLastAdmin(user);
   }
 
   loadUsers() {
@@ -54,5 +77,17 @@ export class UserList implements OnInit {
   onRoleChange(user: UserItem, event: Event) {
     const role = (event.target as HTMLSelectElement).value;
     this.changeRole(user, role);
+  }
+
+  deleteUser(user: UserItem) {
+    if (!window.confirm(`¿Seguro que quieres eliminar a ${user.name}?`)) return;
+
+    this.api.deleteUser(user.id).subscribe({
+      next: () => {
+        this.users = this.users.filter((u) => u.id !== user.id);
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Error deleting user:', err),
+    });
   }
 }

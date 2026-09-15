@@ -15,7 +15,31 @@
 }
 
 .actions {
-  text-align: right;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.actions .btn-danger {
+  padding: 0.5rem 1.25rem;
+  font-size: 0.875rem;
+  background: var(--color-danger);
+  color: #fff;
+}
+
+.actions .btn-danger:hover {
+  background: #7f1d1d;
+  color: #fff;
+}
+
+.actions .btn-danger:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.actions .btn-danger:disabled:hover {
+  transform: none;
+  background: var(--color-danger);
 }
 
 .empty {

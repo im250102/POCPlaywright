@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using backend.Models;
 using backend.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -12,10 +13,12 @@ namespace backend.Controllers;
 public class UsersController : ControllerBase
 {
     private readonly MongoDbContext _db;
+    private readonly UserService _users;
 
-    public UsersController(MongoDbContext db)
+    public UsersController(MongoDbContext db, UserService users)
     {
         _db = db;
+        _users = users;
     }
 
     [HttpGet]
@@ -71,6 +74,24 @@ public class UsersController : ControllerBase
 
         return result.IsAcknowledged && result.MatchedCount > 0 ? NoContent() : NotFound();
     }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(string id)
+    {
+        if (!IsAdmin()) return Forbid();
+
+        var result = await _users.DeleteUserAsync(id, GetUserId(), isAdmin: true);
+        return result.StatusCode switch
+        {
+            400 => BadRequest(new { error = result.Error }),
+            403 => Forbid(),
+            404 => NotFound(),
+            _ => NoContent()
+        };
+    }
+
+    private string GetUserId() =>
+        User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
 
     private bool IsAdmin()
     {
