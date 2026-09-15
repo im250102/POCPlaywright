@@ -1,0 +1,61 @@
+<a routerLink="/blog" class="back-link">← Volver al blog</a>
+
+@if (post) {
+  <article>
+    <header class="post-header">
+      <h1 class="post-title">{{ post.title }}</h1>
+      <div class="post-meta">
+        <span class="category-badge">{{ post.category }}</span>
+        <span>{{ post.authorName }}</span>
+        <span>·</span>
+        <span>{{ post.createdAt | date:'medium' }}</span>
+        @if (post.updatedAt) {
+          <span>· editado {{ post.updatedAt | date:'short' }}</span>
+        }
+      </div>
+    </header>
+
+    <div class="post-content">{{ post.content }}</div>
+
+    @if (canModerate) {
+      <div class="post-actions">
+        <a class="btn btn-outline" [routerLink]="['/blog', post.id, 'edit']">Editar</a>
+        <button class="btn btn-danger" (click)="deletePost()">Eliminar</button>
+      </div>
+    }
+  </article>
+
+  <section class="comments-section">
+    <h3>Comentarios ({{ post.comments.length }})</h3>
+
+    @if (post.comments.length === 0) {
+      <p class="empty-comments">Todavía no hay comentarios.</p>
+    } @else {
+      @for (comment of post.comments; track comment.id) {
+        <div class="comment">
+          <div class="comment-header">
+            <span class="comment-author">{{ comment.authorName }}</span>
+            <span>{{ comment.createdAt | date:'medium' }}</span>
+          </div>
+          <p>{{ comment.text }}</p>
+        </div>
+      }
+    }
+
+    @if (isLoggedIn) {
+      <div class="comment-form">
+        <textarea [(ngModel)]="commentText" placeholder="Escribe un comentario..."></textarea>
+        @if (commentError) {
+          <span class="error">{{ commentError }}</span>
+        }
+        <div class="form-actions">
+          <button class="btn" [disabled]="!commentText.trim()" (click)="addComment()">Comentar</button>
+        </div>
+      </div>
+    } @else {
+      <p class="login-hint"><a routerLink="/login">Inicia sesión</a> para comentar.</p>
+    }
+  </section>
+} @else {
+  <p class="empty-comments">Cargando publicación...</p>
+}

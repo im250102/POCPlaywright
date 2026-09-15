@@ -39,6 +39,8 @@ builder.Services.AddSingleton(sp =>
 
 builder.Services.AddSingleton<PdfExportService>();
 builder.Services.AddSingleton<PatientNotificationService>();
+builder.Services.AddSingleton<IBlogRepository, MongoBlogRepository>();
+builder.Services.AddSingleton<BlogService>();
 builder.Services.AddHttpClient("Notifications");
 
 builder.Services.AddCors(options =>

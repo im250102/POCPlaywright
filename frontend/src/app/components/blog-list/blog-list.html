@@ -1,0 +1,36 @@
+<div class="page-header">
+  <h2>Blog</h2>
+  @if (isLoggedIn) {
+    <a routerLink="/blog/new" class="btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Nuevo Post
+    </a>
+  } @else {
+    <a routerLink="/login" class="btn btn-outline">Inicia sesión para publicar</a>
+  }
+</div>
+
+<div class="filters">
+  <button class="filter-chip" [class.active]="selectedCategory === ''" (click)="filter('')">Todas</button>
+  @for (category of categories; track category) {
+    <button class="filter-chip" [class.active]="selectedCategory === category" (click)="filter(category)">{{ category }}</button>
+  }
+</div>
+
+@if (posts.length === 0) {
+  <div class="empty">No hay publicaciones todavía.</div>
+} @else {
+  @for (post of posts; track post.id) {
+    <a class="post-card" [routerLink]="['/blog', post.id]">
+      <div class="post-meta">
+        <span class="category-badge">{{ post.category }}</span>
+        <span>{{ post.authorName }}</span>
+        <span>·</span>
+        <span>{{ post.createdAt | date:'medium' }}</span>
+      </div>
+      <h3 class="post-title">{{ post.title }}</h3>
+      <p class="post-excerpt">{{ post.content.length > 200 ? (post.content | slice:0:200) + '…' : post.content }}</p>
+      <span class="read-more">Leer más →</span>
+    </a>
+  }
+}

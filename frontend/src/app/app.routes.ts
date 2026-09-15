@@ -10,6 +10,9 @@ import { ReportView } from './components/report-view/report-view';
 import { Login } from './components/login/login';
 import { Register } from './components/register/register';
 import { UserList } from './components/user-list/user-list';
+import { BlogList } from './components/blog-list/blog-list';
+import { BlogPostView } from './components/blog-post/blog-post';
+import { BlogForm } from './components/blog-form/blog-form';
 import { AuthGuard } from './guards/auth.guard';
 import { AdminGuard } from './guards/admin.guard';
 
@@ -17,6 +20,10 @@ export const routes: Routes = [
   { path: 'login', component: Login },
   { path: 'register', component: Register },
   { path: '', component: Home, canActivate: [AuthGuard] },
+  { path: 'blog', component: BlogList },
+  { path: 'blog/new', component: BlogForm, canActivate: [AuthGuard] },
+  { path: 'blog/:id', component: BlogPostView },
+  { path: 'blog/:id/edit', component: BlogForm, canActivate: [AuthGuard] },
   { path: 'patients', component: PatientList, canActivate: [AuthGuard] },
   { path: 'patients/new', component: PatientForm, canActivate: [AuthGuard] },
   { path: 'appointments', component: AppointmentList, canActivate: [AuthGuard] },

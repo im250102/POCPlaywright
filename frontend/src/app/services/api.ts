@@ -5,6 +5,7 @@ import { Patient } from '../models/patient.model';
 import { Appointment, CalendarAppointment } from '../models/appointment.model';
 import { MedicalReport } from '../models/medical-report.model';
 import { UserItem, UserAccessItem } from '../models/user.model';
+import { BlogPost, BlogPostDetail, BlogPostInput, BlogComment } from '../models/blog-post.model';
 import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
@@ -86,5 +87,32 @@ export class Api {
 
   updateUserRole(userId: string, role: string): Observable<void> {
     return this.http.put<void>(`${this.base}/users/${userId}/role`, { role });
+  }
+
+  getPosts(category?: string): Observable<BlogPost[]> {
+    const url = category
+      ? `${this.base}/blog?category=${encodeURIComponent(category)}`
+      : `${this.base}/blog`;
+    return this.http.get<BlogPost[]>(url);
+  }
+
+  getPost(id: string): Observable<BlogPostDetail> {
+    return this.http.get<BlogPostDetail>(`${this.base}/blog/${id}`);
+  }
+
+  createPost(post: BlogPostInput): Observable<BlogPost> {
+    return this.http.post<BlogPost>(`${this.base}/blog`, post);
+  }
+
+  updatePost(id: string, post: BlogPostInput): Observable<BlogPost> {
+    return this.http.put<BlogPost>(`${this.base}/blog/${id}`, post);
+  }
+
+  deletePost(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.base}/blog/${id}`);
+  }
+
+  addComment(postId: string, text: string): Observable<BlogComment> {
+    return this.http.post<BlogComment>(`${this.base}/blog/${postId}/comments`, { text });
   }
 }

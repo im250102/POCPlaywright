@@ -42,4 +42,10 @@ public class MongoDbContext
 
     public IMongoCollection<NotificationLog> NotificationLogs =>
         _database.GetCollection<NotificationLog>("NotificationLogs");
+
+    public IMongoCollection<BlogPost> BlogPosts =>
+        _database.GetCollection<BlogPost>("BlogPosts");
+
+    public IMongoCollection<BlogComment> BlogComments =>
+        _database.GetCollection<BlogComment>("BlogComments");
 }

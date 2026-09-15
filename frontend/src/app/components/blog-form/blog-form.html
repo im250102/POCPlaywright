@@ -1,0 +1,40 @@
+<a routerLink="/blog" class="back-link">← Volver al blog</a>
+
+<div class="form-card">
+  <h2>{{ isEdit ? 'Editar Post' : 'Nuevo Post' }}</h2>
+
+  <div class="form-fields">
+    <label>
+      Título
+      <input type="text" [(ngModel)]="title" placeholder="Título del post" />
+    </label>
+    <label>
+      Categoría
+      <select [(ngModel)]="category">
+        @for (category of categories; track category) {
+          <option [value]="category">{{ category }}</option>
+        }
+      </select>
+    </label>
+    <label>
+      Contenido
+      <textarea
+        rows="10"
+        [(ngModel)]="content"
+        placeholder="Escribe el contenido de tu post..."
+        style="min-height: 200px; resize: vertical;"
+      ></textarea>
+    </label>
+
+    @if (error) {
+      <span class="error-message">{{ error }}</span>
+    }
+
+    <div class="form-actions">
+      <button class="btn btn-outline" (click)="cancel()">Cancelar</button>
+      <button class="btn" [disabled]="!title.trim() || !content.trim()" (click)="save()">
+        {{ isEdit ? 'Guardar cambios' : 'Publicar' }}
+      </button>
+    </div>
+  </div>
+</div>
