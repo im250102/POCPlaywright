@@ -14,6 +14,14 @@ export async function registerTestUser(request) {
   return res.ok();
 }
 
+export async function loginTestUser(request) {
+  const res = await request.post(`${API_BASE}/login`, {
+    data: { email: TEST_USER.email, password: TEST_USER.password },
+  });
+  if (!res.ok()) return null;
+  return res.json();
+}
+
 export async function loginAndSetup(page) {
   const res = await page.request.post(`${API_BASE}/login`, {
     data: { email: TEST_USER.email, password: TEST_USER.password },

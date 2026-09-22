@@ -10,6 +10,12 @@
       <option *ngFor="let p of patients" [value]="p.id">{{ p.name }}</option>
     </select>
   </label>
+  <label>Doctor
+    <select [(ngModel)]="appointment.doctorId" name="doctorId" (change)="onDoctorChange()" required>
+      <option value="">Seleccionar doctor...</option>
+      <option *ngFor="let d of doctors" [value]="d.id">{{ d.name }} {{ d.lastName }}</option>
+    </select>
+  </label>
   <label>Fecha y hora
     <input [(ngModel)]="appointment.date" name="date" type="datetime-local" required />
   </label>

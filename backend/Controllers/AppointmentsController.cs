@@ -12,11 +12,13 @@ public class AppointmentsController : ControllerBase
 {
     private readonly MongoDbContext _db;
     private readonly PdfExportService _pdfExport;
+    private readonly AppointmentService _appointmentService;
 
-    public AppointmentsController(MongoDbContext db, PdfExportService pdfExport)
+    public AppointmentsController(MongoDbContext db, PdfExportService pdfExport, AppointmentService appointmentService)
     {
         _db = db;
         _pdfExport = pdfExport;
+        _appointmentService = appointmentService;
     }
 
     [HttpGet]
@@ -47,9 +49,7 @@ public class AppointmentsController : ControllerBase
         {
             Id = a.Id ?? string.Empty,
             UserId = a.UserId,
-            DoctorName = !string.IsNullOrWhiteSpace(a.UserId) && userMap.TryGetValue(a.UserId, out var name)
-                ? name
-                : "Sin asignar",
+            DoctorName = _appointmentService.ResolveDoctorName(a, userMap),
             PatientId = a.PatientId,
             PatientName = a.PatientName,
             Date = a.Date,
@@ -63,6 +63,10 @@ public class AppointmentsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] Appointment appointment)
     {
+        var validation = _appointmentService.PrepareCreate(appointment);
+        if (validation.StatusCode == 400)
+            return BadRequest(new { error = validation.Error });
+
         await _db.Appointments.InsertOneAsync(appointment);
         return CreatedAtAction(nameof(GetById), new { id = appointment.Id }, appointment);
     }
