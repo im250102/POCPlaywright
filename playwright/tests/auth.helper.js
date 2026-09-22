@@ -1,8 +1,9 @@
 const API_BASE = 'http://localhost:5091/api/auth';
 
+const uniqueSuffix = Date.now();
 const TEST_USER = {
   name: 'Ignacio',
-  email: 'ignacio@medico.es',
+  email: `ignacio.${uniqueSuffix}@medico.es`,
   password: 'TestPass123!',
 };
 

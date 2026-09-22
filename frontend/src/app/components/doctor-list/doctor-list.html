@@ -1,0 +1,28 @@
+<div class="page-header">
+  <h2>Doctores</h2>
+  <a routerLink="/doctors/new" class="btn">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    Nuevo Doctor
+  </a>
+</div>
+
+<table>
+  <thead>
+    <tr><th>Nombre</th><th>Apellidos</th><th>Teléfono</th><th>Especialidad</th><th></th></tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let d of doctors">
+      <td><strong>{{ d.name }}</strong></td>
+      <td>{{ d.lastName }}</td>
+      <td>{{ d.phone }}</td>
+      <td>{{ specialtyName(d.specialty) }}</td>
+      <td class="actions">
+        <a [routerLink]="['/doctors', d.id, 'edit']" class="btn btn-outline btn-sm">Editar</a>
+        <button class="btn btn-danger btn-sm" (click)="deleteDoctor(d.id!)">Eliminar</button>
+      </td>
+    </tr>
+    <tr *ngIf="doctors.length === 0">
+      <td colspan="5" class="empty">No hay doctores registrados</td>
+    </tr>
+  </tbody>
+</table>

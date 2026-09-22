@@ -34,6 +34,9 @@ public class MongoDbContext
     public IMongoCollection<Patient> Patients =>
         _database.GetCollection<Patient>("Patients");
 
+    public IMongoCollection<Doctor> Doctors =>
+        _database.GetCollection<Doctor>("Doctors");
+
     public IMongoCollection<Appointment> Appointments =>
         _database.GetCollection<Appointment>("Appointments");
 

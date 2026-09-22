@@ -43,6 +43,8 @@ builder.Services.AddSingleton<IBlogRepository, MongoBlogRepository>();
 builder.Services.AddSingleton<BlogService>();
 builder.Services.AddSingleton<IUserRepository, MongoUserRepository>();
 builder.Services.AddSingleton<UserService>();
+builder.Services.AddSingleton<IDoctorRepository, MongoDoctorRepository>();
+builder.Services.AddSingleton<DoctorService>();
 builder.Services.AddHttpClient("Notifications");
 
 builder.Services.AddCors(options =>

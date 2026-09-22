@@ -1,0 +1,29 @@
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.page-header h2 {
+  margin: 0;
+}
+
+.actions {
+  text-align: right;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.btn-sm {
+  padding: 0.3rem 0.7rem;
+  font-size: 0.85rem;
+}
+
+.empty {
+  text-align: center;
+  color: var(--color-text-secondary);
+  padding: 2rem !important;
+  font-style: italic;
+}

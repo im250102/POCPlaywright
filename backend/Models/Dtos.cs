@@ -82,6 +82,24 @@ public class BlogCommentRequest
     public string Text { get; set; } = string.Empty;
 }
 
+public class DoctorRequest
+{
+    public string Name { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
+    public string Phone { get; set; } = string.Empty;
+    public string Specialty { get; set; } = string.Empty;
+}
+
+public class DoctorDto
+{
+    public string Id { get; set; } = string.Empty;
+    public string UserId { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
+    public string Phone { get; set; } = string.Empty;
+    public string Specialty { get; set; } = string.Empty;
+}
+
 public class BlogCommentDto
 {
     public string Id { get; set; } = string.Empty;

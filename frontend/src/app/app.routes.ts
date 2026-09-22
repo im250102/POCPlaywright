@@ -2,6 +2,8 @@ import { Routes } from '@angular/router';
 import { Home } from './components/home/home';
 import { PatientList } from './components/patient-list/patient-list';
 import { PatientForm } from './components/patient-form/patient-form';
+import { DoctorList } from './components/doctor-list/doctor-list';
+import { DoctorForm } from './components/doctor-form/doctor-form';
 import { AppointmentList } from './components/appointment-list/appointment-list';
 import { AppointmentForm } from './components/appointment-form/appointment-form';
 import { AppointmentCalendar } from './components/appointment-calendar/appointment-calendar';
@@ -26,6 +28,9 @@ export const routes: Routes = [
   { path: 'blog/:id/edit', component: BlogForm, canActivate: [AuthGuard] },
   { path: 'patients', component: PatientList, canActivate: [AuthGuard] },
   { path: 'patients/new', component: PatientForm, canActivate: [AuthGuard] },
+  { path: 'doctors', component: DoctorList, canActivate: [AuthGuard] },
+  { path: 'doctors/new', component: DoctorForm, canActivate: [AuthGuard] },
+  { path: 'doctors/:id/edit', component: DoctorForm, canActivate: [AuthGuard] },
   { path: 'appointments', component: AppointmentList, canActivate: [AuthGuard] },
   { path: 'appointments/new', component: AppointmentForm, canActivate: [AuthGuard] },
   { path: 'appointments/calendar', component: AppointmentCalendar, canActivate: [AuthGuard] },

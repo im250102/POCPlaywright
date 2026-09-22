@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Patient } from '../models/patient.model';
+import { Doctor } from '../models/doctor.model';
 import { Appointment, CalendarAppointment } from '../models/appointment.model';
 import { MedicalReport } from '../models/medical-report.model';
 import { UserItem, UserAccessItem } from '../models/user.model';
@@ -28,6 +29,26 @@ export class Api {
 
   deletePatient(id: string): Observable<void> {
     return this.http.delete<void>(`${this.base}/patients/${id}`);
+  }
+
+  getDoctors(): Observable<Doctor[]> {
+    return this.http.get<Doctor[]>(`${this.base}/doctors`);
+  }
+
+  getDoctor(id: string): Observable<Doctor> {
+    return this.http.get<Doctor>(`${this.base}/doctors/${id}`);
+  }
+
+  createDoctor(doctor: Doctor): Observable<Doctor> {
+    return this.http.post<Doctor>(`${this.base}/doctors`, doctor);
+  }
+
+  updateDoctor(id: string, doctor: Doctor): Observable<Doctor> {
+    return this.http.put<Doctor>(`${this.base}/doctors/${id}`, doctor);
+  }
+
+  deleteDoctor(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.base}/doctors/${id}`);
   }
 
   getAppointments(): Observable<Appointment[]> {
