@@ -7,6 +7,7 @@ export default defineConfig({
   use: {
     baseURL: 'http://localhost:4200',
     headless: true,
+    channel: 'msedge',
     screenshot: 'only-on-failure',
     trace: 'retain-on-failure',
   },
